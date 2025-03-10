@@ -1,10 +1,10 @@
-package room.module
+package com.example.data.module
 
 import android.app.Application
 import androidx.room.Room
-import room.dao.ProductDao
+import com.example.data.room.dao.ProductDao
 import org.koin.dsl.module
-import room.MyLittlePharmaDB
+import com.example.data.room.MyLittlePharmaDB
 
 
 fun provideDataBase(application: Application): MyLittlePharmaDB =

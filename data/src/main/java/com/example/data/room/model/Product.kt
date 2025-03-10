@@ -1,13 +1,15 @@
-package room.model
+package com.example.data.room.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
+import java.util.UUID
 
 @Entity
 data class Product(
-    @PrimaryKey val uid: Int,
+    @PrimaryKey val uid: String =  UUID.randomUUID().toString(),
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "date") val date: String?
+    @ColumnInfo(name = "date") val date: Date?
 )

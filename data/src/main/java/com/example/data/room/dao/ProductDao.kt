@@ -1,13 +1,14 @@
-package room.dao
+package com.example.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import room.model.Product
+import com.example.data.room.model.Product
 
 @Dao
 interface ProductDao {
@@ -18,9 +19,18 @@ interface ProductDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateProduct(product: Product): Int
 
-    @Insert
-    fun insertProducts(vararg products: Product)
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
+    fun insert(product: Product) : Long
 
     @Delete
     fun deleteProduct(product: Product)
+
+
+    @Transaction
+    suspend fun insertOrUpdate(product: Product){
+        val id = insert(product)
+        if (id==-1L) {
+            updateProduct(product)
+        }
+    }
 }

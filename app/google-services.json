@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "473262890167",
+    "firebase_url": "https://mylittlepharma-2bbfe-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mylittlepharma-2bbfe",
+    "storage_bucket": "mylittlepharma-2bbfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473262890167:android:e0b5ecc007b75832214132",
+        "android_client_info": {
+          "package_name": "com.example.mylittlepharma"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrU7zx8o-RQO0vXvgtyvNtUe1ABk8LnL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

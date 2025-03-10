@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation(project(":domain") )
     implementation(project(":data") )
     implementation(libs.koin)
     implementation(libs.androidx.core.ktx)
