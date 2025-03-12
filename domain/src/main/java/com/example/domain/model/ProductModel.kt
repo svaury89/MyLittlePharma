@@ -7,6 +7,6 @@ data class ProductModel (
      val uid: String =  UUID.randomUUID().toString(),
      val name: String?,
      val description: String?,
-     val date: Date?
+     val date: Date = Date()
 )
 

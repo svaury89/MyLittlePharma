@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -53,6 +54,8 @@ dependencies {
 
     implementation(project(":domain") )
     implementation(project(":data") )
+    implementation(project(":ui") )
+    implementation(libs.firebase)
     implementation(libs.koin)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.ktx)
