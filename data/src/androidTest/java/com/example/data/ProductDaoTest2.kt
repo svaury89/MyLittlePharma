@@ -21,6 +21,7 @@ import org.robolectric.RobolectricTestRunner
 import com.example.data.room.MyLittlePharmaDB
 import com.example.data.room.dao.ProductDao
 import com.example.data.room.model.Product
+import kotlinx.coroutines.test.runTest
 import java.util.Date
 import java.util.concurrent.CountDownLatch
 
@@ -51,15 +52,15 @@ class ProductDaoTest2 {
     }
 
     @Test
-    fun insertProductReturnTrue() = runBlocking {
+    fun insertProductReturnTrue() = runTest {
 
         val product = Product(
         uid= "1",
             name = "Doliprane",
             description = "",
-            date = Date()
+            date = Date().time
         )
-        productDao.insertProducts(product)
+        productDao.insert(product)
 
         val latch = CountDownLatch(1)
         productDao.getProducts().collect{

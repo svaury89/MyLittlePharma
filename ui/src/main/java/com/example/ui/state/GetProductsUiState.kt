@@ -4,6 +4,6 @@ import com.example.domain.model.ProductModel
 
 sealed class GetProductsUiState {
     object isLoding : GetProductsUiState()
-    class isSuccess(products : List<ProductModel>) : GetProductsUiState()
+    class isSuccess(val products : List<ProductModel>) : GetProductsUiState()
     object EmptyList : GetProductsUiState()
 }

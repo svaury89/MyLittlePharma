@@ -19,16 +19,14 @@ class FirebaseDao {
                 throw FireBaseException(exception, exception.message)
             }
     }
-
+    
     suspend fun getProductFromFirebase() : List<Product>  {
         val dbReference = Firebase.database.getReference("products")
         val task = dbReference.get()
         task.await()
         val result = task.result
         return if(result.exists()){
-
-            val map =  result.value as Map<String,Product>
-            Log.i("FIREBASE","FIREBASE Test "+ map.values)
+            val map =  result.getValue<Map<String,Product>>()?: emptyMap()
             map.values.toList()
         }else{
             emptyList()

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MyLittlePharma</string>
+    <string name="product_name">Nom : </string>
+    <string name="product_description">Details : </string>
+    <string name="product_date">Date : </string>
+
+    <string name="save_product"> Sauvegarder </string>
+
+</resources>

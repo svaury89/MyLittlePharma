@@ -9,8 +9,8 @@ class ProductMapper {
     fun toProductModel(product: Product) =
         ProductModel(
             uid = product.uid,
-            name = product.name,
-            description = product.description,
+            name = product.name ?: " ",
+            description = product.description ?:"",
             date = Date(product.date)
         )
 

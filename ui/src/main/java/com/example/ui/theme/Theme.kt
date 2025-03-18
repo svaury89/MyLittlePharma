@@ -1,4 +1,4 @@
-package com.example.mylittlepharma.ui.theme
+package com.example.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -12,15 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = AlmondGreen,
+    secondary = LightGreen,
+    tertiary = DarkGreen
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = AlmondGreen,
+    secondary = LightGreen,
+    tertiary = DarkGreen
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -37,7 +37,7 @@ private val LightColorScheme = lightColorScheme(
 fun MyLittlePharmaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -45,7 +45,6 @@ fun MyLittlePharmaTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

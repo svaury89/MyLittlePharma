@@ -9,6 +9,8 @@ interface ProductRepository {
 
     fun getProductList():Flow<List<ProductModel>>
 
+    fun getProductByIdOrNull(id : String?) : Flow<ProductModel?>
+
     suspend fun syncProductFromFireBase()
 
 }
