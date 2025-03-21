@@ -5,8 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.domain.model.ProductModel
 import com.example.domain.repository.ProductRepository
+import com.example.ui.mapper.ProductUiMapper
+import com.example.ui.model.ProductUi
 import com.example.ui.navigation.AddOrUpdateProductNavigation
 import com.example.ui.state.GetProductUiState
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,19 +18,20 @@ import kotlinx.coroutines.launch
 
 class AddOrUpdateProductViewModel(
     val productRepository: ProductRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    val mapper: ProductUiMapper
 ) : ViewModel() {
 
     val args = savedStateHandle.toRoute<AddOrUpdateProductNavigation>()
 
-    var productModel = ProductModel()
+    var productUi = ProductUi()
 
     val state = productRepository.getProductByIdOrNull(args.productUuid)
         .map { productModelResult ->
             productModelResult?.let {
-                productModel = productModelResult.copy()
+                productUi = mapper.toProductUi(productModelResult.copy())
             }
-            GetProductUiState.isSuccess(productModel)
+            GetProductUiState.isSuccess(productUi)
         }.distinctUntilChanged()
         .stateIn(
             scope = viewModelScope,
@@ -38,9 +40,9 @@ class AddOrUpdateProductViewModel(
         )
 
     fun saveProduct(name: String, description: String) {
-       val savedProductModel =  productModel.copy(name = name, description = description)
+       val savedProductModel =  productUi.copy(name = name, description = description)
         viewModelScope.launch {
-            productRepository.addOrUpdateProduct(savedProductModel)
+            productRepository.addOrUpdateProduct(mapper.fromProductUi(savedProductModel))
         }
     }
 }

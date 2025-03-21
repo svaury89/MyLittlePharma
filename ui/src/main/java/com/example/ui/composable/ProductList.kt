@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.foundation.lazy.items
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,9 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.domain.model.ProductModel
 import com.example.ui.R
+import com.example.ui.model.ProductUi
 import com.example.ui.navigation.AddOrUpdateProductNavigation
+import com.example.ui.navigation.ScanProductNavigation
 import com.example.ui.state.GetProductsUiState
 import com.example.ui.viewmodel.ProductListViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -86,24 +85,38 @@ fun HomeScreen(
         ) {
             Icon(Icons.Filled.Add, "Add Product")
         }
+
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp),
+            shape = CircleShape,
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = MaterialTheme.colorScheme.tertiary,
+            onClick = {
+                navController.navigate(ScanProductNavigation)
+            },
+        ) {
+            Icon(painterResource(id = R.drawable.ic_scanner_24), "Scan Product")
+        }
     }
 
 
 }
 
 @Composable
-fun ProductList(products: List<ProductModel>,
+fun ProductList(products: List<ProductUi>,
                 navController: NavHostController) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(products) { product ->
-            ProductDetail(product) { navController.navigate(AddOrUpdateProductNavigation(product.uid)) }
+            ProductDetail(product) { navController.navigate(AddOrUpdateProductNavigation(product.uuid)) }
         }
 
     }
 }
 
 @Composable
-fun ProductDetail(productModel: ProductModel, onProductSelected : () -> Unit) {
+fun ProductDetail(productUi: ProductUi, onProductSelected : () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -127,9 +140,9 @@ fun ProductDetail(productModel: ProductModel, onProductSelected : () -> Unit) {
                 )
             }
             Column(modifier = Modifier.padding(8.dp)) {
-                TitleText(title = R.string.product_name, value = productModel.name)
-                TitleText(title = R.string.product_description, value = productModel.description)
-                TitleText(title = R.string.product_date, value = productModel.date.toString())
+                TitleText(title = R.string.product_name, value = productUi.name)
+                TitleText(title = R.string.product_description, value = productUi.description)
+                TitleText(title = R.string.product_date, value = productUi.date.toString())
             }
         }
 

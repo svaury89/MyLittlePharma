@@ -1,25 +1,19 @@
 package com.example.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.ProductModel
 import com.example.domain.repository.ProductRepository
+import com.example.ui.mapper.ProductUiMapper
 import com.example.ui.state.GetProductsUiState
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 
 class ProductListViewModel(
-     val productRepository: ProductRepository
+     val productRepository: ProductRepository,
+    val mapper: ProductUiMapper
 ) : ViewModel() {
 
     val productState  = productRepository
@@ -30,7 +24,7 @@ class ProductListViewModel(
                 productRepository
                 GetProductsUiState.EmptyList
             }
-            else { GetProductsUiState.isSuccess(products) }
+            else { GetProductsUiState.isSuccess(products.map {mapper.toProductUi(it)}) }
         }.distinctUntilChanged()
         .stateIn(
             scope = viewModelScope ,

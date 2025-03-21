@@ -25,15 +25,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget =  JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
@@ -56,6 +56,15 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.kotlin.serialization)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.camera.core)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.view)
+    implementation(libs.mlkit.scan)
+    coreLibraryDesugaring(libs.desugar)
+
+    // The following line is optional, as the core library is included indirectly by camera-camera2
+
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)

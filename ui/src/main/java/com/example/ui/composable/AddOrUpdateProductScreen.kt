@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.domain.model.ProductModel
 import com.example.ui.R
+import com.example.ui.model.ProductUi
 import com.example.ui.state.GetProductUiState
 import com.example.ui.viewmodel.AddOrUpdateProductViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -49,11 +50,11 @@ fun AddOrUpdateProductScreen(
 fun Form(
     navController: NavController,
     onSaveClick : (String, String)->Unit ,
-    productModel: ProductModel
+    productUi: ProductUi
 ){
-    var name by remember { mutableStateOf(productModel.name) }
-    var description by remember { mutableStateOf(productModel.description) }
-    var date by remember { mutableStateOf(productModel.date.toString()) }
+    var name by remember { mutableStateOf(productUi.name) }
+    var description by remember { mutableStateOf(productUi.description) }
+    var date by remember { mutableStateOf(productUi.date) }
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -74,6 +75,8 @@ fun Form(
         }) {
             Text(text = stringResource(id = R.string.save_product))
         }
+
+
     }
 }
 
