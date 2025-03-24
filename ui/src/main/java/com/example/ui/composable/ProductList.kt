@@ -130,7 +130,7 @@ fun ProductDetail(productUi: ProductUi, onProductSelected : () -> Unit) {
             modifier = Modifier.padding(8.dp)
         ) {
             Column(
-                modifier = Modifier.background(Color.Red), //important
+                modifier = Modifier.background(MaterialTheme.colorScheme.background), //important
                 verticalArrangement = Arrangement.Center
             ) {
                 Image(

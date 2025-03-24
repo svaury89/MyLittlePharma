@@ -57,7 +57,6 @@ dependencies {
     implementation(project(":domain") )
     implementation(project(":data") )
     implementation(project(":ui") )
-    implementation(libs.firebase)
     implementation(libs.koin)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.ktx)

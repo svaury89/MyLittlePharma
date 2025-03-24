@@ -8,6 +8,7 @@ data class ProductModel(
      val uid: String =  UUID.randomUUID().toString(),
      val name: String = "",
      val description: String = "",
-     val date: LocalDate = LocalDate.now()
+     val date: LocalDate = LocalDate.now(),
+     val image : String  = ""
 )
 

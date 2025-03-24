@@ -1,19 +1,25 @@
 package com.example.ui.composable
 
+import android.app.Application
+import android.graphics.Bitmap
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,20 +27,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.domain.model.ProductModel
 import com.example.ui.R
 import com.example.ui.model.ProductUi
 import com.example.ui.state.GetProductUiState
 import com.example.ui.viewmodel.AddOrUpdateProductViewModel
 import org.koin.androidx.compose.koinViewModel
-import java.text.Normalizer.Form
 
 @Composable
 fun AddOrUpdateProductScreen(
@@ -42,12 +45,20 @@ fun AddOrUpdateProductScreen(
     vm: AddOrUpdateProductViewModel = koinViewModel()
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
+    val productUi by vm.productUi.collectAsStateWithLifecycle()
+    val contentResolver =  LocalContext.current.contentResolver
     when (state) {
         is GetProductUiState.isLoding -> Progress()
         is GetProductUiState.isSuccess -> Form(
             navController = navController,
-            onSaveClick = { name, description -> vm.saveProduct(name, description) },
-            (state as GetProductUiState.isSuccess).product
+            onSaveClick = { vm.saveProduct() },
+            productUi = productUi,
+            onNameEdit = {vm.updateProductUi(name = it)},
+            onDescriptionEdit = {vm.updateProductUi(description = it)},
+            onDateEdit = {vm.updateProductUi(date = it)},
+            onUpdateImage = {
+                vm.updateImage(it,contentResolver)
+            }
         )
     }
 
@@ -56,49 +67,46 @@ fun AddOrUpdateProductScreen(
 @Composable
 fun Form(
     navController: NavController,
-    onSaveClick: (String, String) -> Unit,
-    productUi: ProductUi
+    onSaveClick: () -> Unit,
+    productUi: ProductUi,
+    onNameEdit : (String) -> Unit,
+    onDescriptionEdit : (String) -> Unit,
+    onDateEdit : (String) -> Unit,
+    onUpdateImage : (Uri?) -> Unit
 ) {
-    var name by remember { mutableStateOf(productUi.name) }
-    var description by remember { mutableStateOf(productUi.description) }
-    var date by remember { mutableStateOf(productUi.date) }
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
 
-        Row(
-            modifier = Modifier.padding(8.dp)
+    val photoPickerLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia()
         ) {
-            Column(
-                modifier = Modifier.background(Color.Red), //important
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painterResource(R.drawable.no_photography),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                )
-
-            }
-            Column {
-                ProductField(title = R.string.product_name, name) { name = it }
-                ProductField(title = R.string.product_description, description) { description = it }
-                ProductField(title = R.string.product_date, date) { date = it }
-            }
-            Button(onClick = {
-                onSaveClick(name, description)
-                navController.popBackStack()
-            }) {
-                Text(text = stringResource(id = R.string.save_product))
-            }
+            onUpdateImage(it)
         }
 
+    Column {
 
+        FormCard(
+            productUi = productUi,
+            onChangeName = onNameEdit,
+            onChangeDescription = onDescriptionEdit ,
+            onChangeDate = onDateEdit,
+            selectedImageUri =productUi.image ,
+            photoPickerLauncher = photoPickerLauncher
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+                onClick = {
+                    onSaveClick()
+                    navController.popBackStack()
+                }) {
+                BoldText(title = R.string.save_product)
+            }
+        }
     }
 }
 
@@ -108,13 +116,28 @@ fun ProductField(
     textFieldValue: String = "",
     onValueChange: (String) -> Unit
 ) {
-    Row(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = stringResource(id = title),
-            color = MaterialTheme.colorScheme.tertiary,
-            fontWeight = FontWeight.Bold
+    Column(modifier = Modifier.padding(16.dp)) {
+        BoldText(title = title)
+        TextField(
+            value = textFieldValue,
+            onValueChange = onValueChange,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.secondary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                errorContainerColor = Color.Red,
+                focusedTextColor = MaterialTheme.colorScheme.tertiary,
+                unfocusedTextColor = MaterialTheme.colorScheme.tertiary
+            ),
         )
-        TextField(value = textFieldValue, onValueChange = onValueChange)
-
     }
 }
+
+@Composable
+fun BoldText(@StringRes title: Int) {
+    Text(
+        text = stringResource(id = title),
+        color = MaterialTheme.colorScheme.tertiary,
+        fontWeight = FontWeight.Bold
+    )
+}
+

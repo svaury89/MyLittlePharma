@@ -12,7 +12,8 @@ class ProductMapper {
             uid = product.uid,
             name = product.name ?: " ",
             description = product.description ?:"",
-            date = Instant.ofEpochMilli(product.date).atZone(ZoneId.systemDefault()).toLocalDate()
+            date = Instant.ofEpochMilli(product.date).atZone(ZoneId.systemDefault()).toLocalDate(),
+            image = product.image ?: ""
         )
 
     fun fromProductModel(productModel: ProductModel) =
@@ -20,6 +21,7 @@ class ProductMapper {
             uid = productModel.uid,
             name = productModel.name,
             description = productModel.description,
-            date = productModel.date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+            date = productModel.date.atStartOfDay(ZoneId.systemDefault()).toEpochSecond(),
+            image = productModel.image
         )
 }
