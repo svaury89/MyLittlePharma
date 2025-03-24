@@ -6,7 +6,9 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

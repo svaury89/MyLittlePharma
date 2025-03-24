@@ -2,11 +2,12 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.example.ui"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -62,6 +63,8 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.mlkit.scan)
     coreLibraryDesugaring(libs.desugar)
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+    //implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
 
     // The following line is optional, as the core library is included indirectly by camera-camera2
 
