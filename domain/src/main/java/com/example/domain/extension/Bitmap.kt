@@ -1,4 +1,4 @@
-package com.example.ui.extension
+package com.example.domain.extension
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

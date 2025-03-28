@@ -62,11 +62,8 @@ dependencies {
     implementation(libs.camera.camera2)
     implementation(libs.camera.view)
     implementation(libs.mlkit.scan)
+    implementation(libs.coil)
     coreLibraryDesugaring(libs.desugar)
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    //implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
-
-    // The following line is optional, as the core library is included indirectly by camera-camera2
 
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.ui)

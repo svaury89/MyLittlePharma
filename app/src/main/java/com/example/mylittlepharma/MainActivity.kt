@@ -2,6 +2,7 @@ package com.example.mylittlepharma
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,8 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ui.theme.MyLittlePharmaTheme
 import com.example.ui.composable.AddOrUpdateProductScreen
 import com.example.ui.composable.HomeScreen
+import com.example.ui.composable.ProductByEanScreen
 import com.example.ui.composable.ScanProductScreen
 import com.example.ui.navigation.AddOrUpdateProductNavigation
+import com.example.ui.navigation.EanProductNavigation
 import com.example.ui.navigation.HomeScreenNavigation
 import com.example.ui.navigation.ScanProductNavigation
 
@@ -21,6 +24,15 @@ import com.example.ui.navigation.ScanProductNavigation
 class MainActivity : ComponentActivity() {
 
     private val cameraPermissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                // Implement camera related  code
+            } else {
+                // Camera permission denied
+            }
+
+        }
+    private val notificationPermissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 // Implement camera related  code
@@ -40,15 +52,13 @@ class MainActivity : ComponentActivity() {
                 // Camera permission already granted
                 // Implement camera related code
             }
-            else -> {
-                cameraPermissionRequest.launch( android.Manifest.permission.CAMERA)
-            }
+
         }
 
         setContent {
             MyLittlePharmaTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController , startDestination = HomeScreenNavigation ){
+                NavHost(navController = navController, startDestination = HomeScreenNavigation) {
                     composable<HomeScreenNavigation> {
                         HomeScreen(navController = navController)
                     }
@@ -57,6 +67,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<ScanProductNavigation> {
                         ScanProductScreen(navigationController = navController)
+                    }
+                    composable<EanProductNavigation> {
+                        ProductByEanScreen(navController = navController)
                     }
                 }
             }

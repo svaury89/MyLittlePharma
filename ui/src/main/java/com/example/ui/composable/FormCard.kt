@@ -30,10 +30,9 @@ import com.example.ui.model.ProductUi
 @Composable
 fun FormCard(
     productUi: ProductUi,
-    onChangeName:(String)->Unit,
-    onChangeDescription:(String)->Unit,
-    onChangeDate:(String)->Unit,
-    selectedImageUri : Bitmap?,
+    onChangeName:((String)->Unit) ?   = null ,
+    onChangeDescription:((String)->Unit) ? = null,
+    onChangeDate:(String)->Unit = {},
     photoPickerLauncher : ManagedActivityResultLauncher<PickVisualMediaRequest,Uri?>
 ){
     Card(
@@ -60,7 +59,7 @@ fun FormCard(
                 horizontalArrangement = Arrangement.Center
             )
             {
-                if (selectedImageUri == null) {
+                if (productUi.image == null) {
                     Image(
                         modifier = Modifier.size(200.dp),
                         contentScale = ContentScale.FillWidth,
@@ -72,7 +71,7 @@ fun FormCard(
                         modifier = Modifier
                             .size(200.dp)
                             .clip(RoundedCornerShape(16.dp)),
-                        model = selectedImageUri,
+                        model = productUi.image,
                         contentDescription = null,
                         contentScale = ContentScale.FillWidth,
                         placeholder = painterResource(id = R.drawable.no_photography),
@@ -80,9 +79,9 @@ fun FormCard(
                 }
             }
 
-            ProductField(title = R.string.product_name, productUi.name) {onChangeName(it) }
-            ProductField(title = R.string.product_description, productUi.description) {onChangeDescription(it) }
-            ProductField(title = R.string.product_date, productUi.date) { onChangeDate(it) }
+            ProductField(title = R.string.product_name, productUi.name, onValueChange = onChangeName ?: {}, isEnabled = onChangeName !=null)
+            ProductField(title = R.string.product_description, productUi.description, onValueChange = onChangeDescription ?: {}, isEnabled = onChangeDescription != null)
+            ProductField(title = R.string.product_date, productUi.date, onValueChange = onChangeDate)
         }
 
     }

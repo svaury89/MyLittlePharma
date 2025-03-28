@@ -9,5 +9,5 @@ import org.koin.dsl.module
 val repositoryModule = module {
     single { FirebaseDao() }
     single {ProductMapper() }
-    single <ProductRepository> { ProductRepositoryImpl(get(),get(),get()) }
+    single <ProductRepository> { ProductRepositoryImpl(get(),get(),get(),get()) }
 }

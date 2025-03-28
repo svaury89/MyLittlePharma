@@ -24,6 +24,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.ui.navigation.EanProductNavigation
+import com.example.ui.state.GetNetworkProductState
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -34,7 +38,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Composable
-fun CameraScreen() {
+fun CameraScreen(
+    navController: NavHostController
+) {
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -57,7 +63,7 @@ fun CameraScreen() {
         imageAnalysis.setAnalyzer(
             cameraExecutor
         ){
-            processImageProxy(scanner,it,cameraProvider)
+            processImageProxy(scanner,it,cameraProvider,navController)
         }
     }
     AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
@@ -73,7 +79,8 @@ fun CameraScreen() {
 fun processImageProxy(
     barcodeScanner: BarcodeScanner,
     imageProxy: ImageProxy,
-    cameraProvider: ProcessCameraProvider
+    cameraProvider: ProcessCameraProvider,
+    navController: NavHostController
 ){
     imageProxy.image?.let { image ->
         val inputImage = InputImage.fromMediaImage(image,imageProxy.imageInfo.rotationDegrees)
@@ -82,7 +89,7 @@ fun processImageProxy(
             val barcode = barcodeList.getOrNull(0)
 
             barcode?.rawValue?.let {
-                Log.i("Scan","Scan "+ it)
+                navController.navigate(EanProductNavigation(it))
                 cameraProvider.unbindAll()
             }
 

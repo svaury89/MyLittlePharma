@@ -9,6 +9,7 @@ data class ProductModel(
      val name: String = "",
      val description: String = "",
      val date: LocalDate = LocalDate.now(),
-     val image : String  = ""
+     val image : String ?  = null,
+     val imageUrl: String ? = null
 )
 

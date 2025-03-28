@@ -2,6 +2,7 @@ package com.example.mylittlepharma.application
 
 import android.app.Application
 import com.example.data.module.dataBaseModule
+import com.example.data.module.networkModule
 import com.example.data.module.repositoryModule
 import com.example.ui.module.uiModule
 import org.koin.android.ext.koin.androidContext
@@ -13,7 +14,7 @@ class MyLittlePharmaApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MyLittlePharmaApplication)
-            modules(dataBaseModule, repositoryModule, uiModule)
+            modules(dataBaseModule, networkModule, repositoryModule, uiModule)
         }
     }
 }

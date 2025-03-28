@@ -3,13 +3,16 @@ package com.example.ui.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.repository.ProductRepository
+import com.example.ui.extension.registerOrDeleteAlarm
 import com.example.ui.mapper.ProductUiMapper
 import com.example.ui.model.ProductUi
 import com.example.ui.navigation.AddOrUpdateProductNavigation
@@ -22,6 +25,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.UUID
+import kotlin.random.Random
 
 
 class AddOrUpdateProductViewModel(
@@ -48,10 +54,13 @@ class AddOrUpdateProductViewModel(
             initialValue = GetProductUiState.isLoding
         )
 
-    fun saveProduct() {
+    fun saveProduct(context: Context) {
         val savedProductModel = _productUi.value.copy()
         viewModelScope.launch {
-            productRepository.addOrUpdateProduct(mapper.fromProductUi(savedProductModel))
+            val productModel = mapper.fromProductUi(savedProductModel)
+            productRepository.addOrUpdateProduct(productModel)
+            productModel.date.registerOrDeleteAlarm(context,productModel.uid.hashCode(),true)
+            productModel.date.registerOrDeleteAlarm(context,productModel.uid.hashCode())
         }
     }
 
@@ -70,8 +79,6 @@ class AddOrUpdateProductViewModel(
             }
         }
     }
-
-
 
 
     fun updateProductUi(name: String? = null, description: String? = null, date: String? = null) {

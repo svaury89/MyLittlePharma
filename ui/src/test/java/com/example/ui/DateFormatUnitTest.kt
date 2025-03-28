@@ -1,7 +1,7 @@
 package com.example.ui
 import androidx.compose.material3.DatePicker
-import com.example.ui.extension.toDateWithFormat
-import com.example.ui.extension.toStringWithFormat
+import com.example.domain.extension.toDateWithFormat
+import com.example.domain.extension.toStringWithFormat
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate

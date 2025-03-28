@@ -7,5 +7,5 @@ data class ProductUi (
     val name : String = "",
     val description : String = "",
     val date: String = "",
-    val image : Bitmap ? = null
+    val image : Bitmap ? = null ,
 )

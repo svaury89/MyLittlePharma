@@ -1,7 +1,12 @@
-package com.example.ui.extension
+package com.example.domain.extension
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -23,5 +28,20 @@ fun String.toBitMap() : Bitmap ? =
         BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }else null
 
+
+
+suspend fun String.networkUrltoBitmap(): Bitmap ? {
+ 
+    val url = this
+    return try {
+        withContext(Dispatchers.IO) {
+            BitmapFactory.decodeStream(
+                URL(url).openConnection().getInputStream()
+            )
+        }
+    } catch (e: IOException) {
+        null
+    }
+}
 
 

@@ -46,20 +46,26 @@ fun AddOrUpdateProductScreen(
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val productUi by vm.productUi.collectAsStateWithLifecycle()
-    val contentResolver =  LocalContext.current.contentResolver
+    val context = LocalContext.current
+    val contentResolver =  context.contentResolver
+
     when (state) {
-        is GetProductUiState.isLoding -> Progress()
-        is GetProductUiState.isSuccess -> Form(
-            navController = navController,
-            onSaveClick = { vm.saveProduct() },
-            productUi = productUi,
-            onNameEdit = {vm.updateProductUi(name = it)},
-            onDescriptionEdit = {vm.updateProductUi(description = it)},
-            onDateEdit = {vm.updateProductUi(date = it)},
-            onUpdateImage = {
-                vm.updateImage(it,contentResolver)
-            }
-        )
+        GetProductUiState.isLoding -> {
+            Progress()
+        }
+        is GetProductUiState.isSuccess -> {
+            Form(
+                navController = navController,
+                onSaveClick = { vm.saveProduct(context) },
+                productUi = productUi,
+                onNameEdit = {vm.updateProductUi(name = it)},
+                onDescriptionEdit = {vm.updateProductUi(description = it)},
+                onDateEdit = {vm.updateProductUi(date = it)},
+                onUpdateImage = {
+                    vm.updateImage(it,contentResolver)
+                }
+            )
+        }
     }
 
 }
@@ -69,8 +75,8 @@ fun Form(
     navController: NavController,
     onSaveClick: () -> Unit,
     productUi: ProductUi,
-    onNameEdit : (String) -> Unit,
-    onDescriptionEdit : (String) -> Unit,
+    onNameEdit : ((String) -> Unit) ? = null,
+    onDescriptionEdit : ((String) -> Unit)? = null,
     onDateEdit : (String) -> Unit,
     onUpdateImage : (Uri?) -> Unit
 ) {
@@ -89,7 +95,6 @@ fun Form(
             onChangeName = onNameEdit,
             onChangeDescription = onDescriptionEdit ,
             onChangeDate = onDateEdit,
-            selectedImageUri =productUi.image ,
             photoPickerLauncher = photoPickerLauncher
         )
         Spacer(modifier = Modifier.size(16.dp))
@@ -114,7 +119,8 @@ fun Form(
 fun ProductField(
     @StringRes title: Int,
     textFieldValue: String = "",
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit= {},
+    isEnabled : Boolean = true
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         BoldText(title = title)

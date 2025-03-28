@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     coreLibraryDesugaring(libs.desugar)
+    implementation(libs.coil.network)
+    implementation(libs.coil)
 
     implementation(libs.material)
     testImplementation(libs.junit)
