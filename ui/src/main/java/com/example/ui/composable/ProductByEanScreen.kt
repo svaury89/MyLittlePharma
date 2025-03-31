@@ -6,9 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.ui.model.ProductUi
 import com.example.ui.state.GetNetworkProductState
-import com.example.ui.viewmodel.AddOrUpdateProductViewModel
 import com.example.ui.viewmodel.ProductByEanViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -17,36 +15,32 @@ fun ProductByEanScreen(
     navController: NavController,
     vm: ProductByEanViewModel = koinViewModel()
 ) {
-    Log.i("ProductByEan ","ProductbyEAN Screen ")
 
     val state by vm.state.collectAsStateWithLifecycle()
+    val productUi by vm.productUi.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val contentResolver =  context.contentResolver
+
     when(state){
         GetNetworkProductState.EmptyProduct -> Log.i("ProductByEan ","ProductbyEAN Empty")
         is GetNetworkProductState.Error -> Log.i("ProductByEan ","ProductbyEAN Error "+ (state as GetNetworkProductState.Error).message)
-        is GetNetworkProductState.Product -> ProductDetail(
-            productUi = (state as GetNetworkProductState.Product).productUi,
-            navController = navController
-        )
+        is GetNetworkProductState.Product ->
+            Form(
+                navController = navController,
+                onSaveClick = { vm.saveProduct(context) },
+                productUi = productUi,
+                onNameEdit = {vm.updateProductUi(name = it)},
+                onDescriptionEdit = {vm.updateProductUi(description = it)},
+                onDateEdit = {vm.updateProductUi(date = it)},
+                onUpdateImage = {
+                    vm.updateImage(it,contentResolver)
+                }
+            )
+
         GetNetworkProductState.isLoading -> Progress()
     }
 
 }
 
-@Composable
-fun ProductDetail(
-    productUi: ProductUi,
-    navController: NavController
-){
-    Form(
-        navController = navController,
-        onSaveClick = { },
-        productUi = productUi,
-        onNameEdit = {},
-        onDescriptionEdit = {},
-        onDateEdit = {}
-    ) {
 
-    }
-
-}
 

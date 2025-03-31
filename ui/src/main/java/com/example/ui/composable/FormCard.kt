@@ -79,9 +79,9 @@ fun FormCard(
                 }
             }
 
-            ProductField(title = R.string.product_name, productUi.name, onValueChange = onChangeName ?: {}, isEnabled = onChangeName !=null)
-            ProductField(title = R.string.product_description, productUi.description, onValueChange = onChangeDescription ?: {}, isEnabled = onChangeDescription != null)
-            ProductField(title = R.string.product_date, productUi.date, onValueChange = onChangeDate)
+            MLPTextField(title = R.string.product_name, textFieldValue =  productUi.name, onValueChange = onChangeName ?: {})
+            MLPTextField(title = R.string.product_description, textFieldValue =  productUi.description, onValueChange = onChangeDescription ?: {})
+            LimitDate(onUpdateDate =  onChangeDate, date = productUi.date, title = R.string.product_date )
         }
 
     }

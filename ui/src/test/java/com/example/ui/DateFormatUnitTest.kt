@@ -8,11 +8,6 @@ import java.time.LocalDate
 import java.util.Date
 
 class DateFormatUnitTest {
-    // Generer une date string en date
-    // générer une date sous le format dd/MM/YYYY
-    // Si une string est null renvoyer la date du jour
-    //Si une date est null, renvoyer la string du jour
-
 
     @Test
     fun map_date_to_string_with_specific_format(){

@@ -5,6 +5,7 @@ import com.example.data.api.model.ProductApi
 import com.example.data.api.model.ProductDetailAPi
 import com.example.data.room.model.Product
 import com.example.domain.extension.toDateWithFormat
+import com.example.domain.extension.toLocalDate
 import com.example.domain.extension.toMillis
 import com.example.domain.model.ProductModel
 import java.time.Instant
@@ -18,7 +19,7 @@ class ProductMapper {
             uid = product.uid,
             name = product.name ?: " ",
             description = product.description ?: "",
-            date = Instant.ofEpochMilli(product.date).atZone(ZoneId.systemDefault()).toLocalDate(),
+            date = product.date.toLocalDate(),
             image = product.image ?: ""
         )
 

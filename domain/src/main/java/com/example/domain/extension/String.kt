@@ -14,24 +14,23 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 
-fun String.toDateWithFormat(pattern : String = "dd/MM/yyyy"): LocalDate =
+fun String.toDateWithFormat(pattern: String = "dd/MM/yyyy"): LocalDate =
     try {
         LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
-    }catch (e: DateTimeParseException){
+    } catch (e: DateTimeParseException) {
         LocalDate.now()
     }
 
 @OptIn(ExperimentalEncodingApi::class)
-fun String.toBitMap() : Bitmap ? =
-    if(this.isNotEmpty()){
+fun String.toBitMap(): Bitmap? =
+    if (this.isNotEmpty()) {
         val imageBytes = Base64.decode(this, 0)
         BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    }else null
+    } else null
 
 
+suspend fun String.networkUrltoBitmap(): Bitmap? {
 
-suspend fun String.networkUrltoBitmap(): Bitmap ? {
- 
     val url = this
     return try {
         withContext(Dispatchers.IO) {
@@ -41,6 +40,19 @@ suspend fun String.networkUrltoBitmap(): Bitmap ? {
         }
     } catch (e: IOException) {
         null
+    }
+}
+
+fun String?.isNullOrEmpty() = this.isNullOrBlank() or (this != null && this.isEmpty())
+
+
+fun String.isDateFormatValid(pattern: String = "dd/MM/yyyy"): Boolean {
+    try {
+        val formatter = DateTimeFormatter.ofPattern(pattern)
+        val localDate = LocalDate.parse(this, formatter)
+        return formatter.format(localDate).equals(this)
+    } catch (e: Exception) {
+        return false
     }
 }
 

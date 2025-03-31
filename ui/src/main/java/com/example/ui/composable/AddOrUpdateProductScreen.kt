@@ -49,6 +49,7 @@ fun AddOrUpdateProductScreen(
     val context = LocalContext.current
     val contentResolver =  context.contentResolver
 
+
     when (state) {
         GetProductUiState.isLoding -> {
             Progress()
@@ -115,28 +116,6 @@ fun Form(
     }
 }
 
-@Composable
-fun ProductField(
-    @StringRes title: Int,
-    textFieldValue: String = "",
-    onValueChange: (String) -> Unit= {},
-    isEnabled : Boolean = true
-) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        BoldText(title = title)
-        TextField(
-            value = textFieldValue,
-            onValueChange = onValueChange,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                errorContainerColor = Color.Red,
-                focusedTextColor = MaterialTheme.colorScheme.tertiary,
-                unfocusedTextColor = MaterialTheme.colorScheme.tertiary
-            ),
-        )
-    }
-}
 
 @Composable
 fun BoldText(@StringRes title: Int) {
