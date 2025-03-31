@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -46,25 +47,28 @@ fun AddOrUpdateProductScreen(
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val productUi by vm.productUi.collectAsStateWithLifecycle()
+    val validator by vm.validFormState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val contentResolver =  context.contentResolver
+    val contentResolver = context.contentResolver
 
 
     when (state) {
         GetProductUiState.isLoding -> {
             Progress()
         }
+
         is GetProductUiState.isSuccess -> {
             Form(
                 navController = navController,
                 onSaveClick = { vm.saveProduct(context) },
                 productUi = productUi,
-                onNameEdit = {vm.updateProductUi(name = it)},
-                onDescriptionEdit = {vm.updateProductUi(description = it)},
-                onDateEdit = {vm.updateProductUi(date = it)},
+                onNameEdit = { vm.updateProductUi(name = it) },
+                onDescriptionEdit = { vm.updateProductUi(description = it) },
+                onDateEdit = { vm.updateProductUi(date = it) },
                 onUpdateImage = {
-                    vm.updateImage(it,contentResolver)
-                }
+                    vm.updateImage(it, contentResolver)
+                },
+                isButtonEnabled = validator
             )
         }
     }
@@ -76,10 +80,11 @@ fun Form(
     navController: NavController,
     onSaveClick: () -> Unit,
     productUi: ProductUi,
-    onNameEdit : ((String) -> Unit) ? = null,
-    onDescriptionEdit : ((String) -> Unit)? = null,
-    onDateEdit : (String) -> Unit,
-    onUpdateImage : (Uri?) -> Unit
+    onNameEdit: ((String) -> Unit)? = null,
+    onDescriptionEdit: ((String) -> Unit)? = null,
+    onDateEdit: (String) -> Unit,
+    onUpdateImage: (Uri?) -> Unit,
+    isButtonEnabled : Boolean
 ) {
 
     val photoPickerLauncher =
@@ -94,7 +99,7 @@ fun Form(
         FormCard(
             productUi = productUi,
             onChangeName = onNameEdit,
-            onChangeDescription = onDescriptionEdit ,
+            onChangeDescription = onDescriptionEdit,
             onChangeDate = onDateEdit,
             photoPickerLauncher = photoPickerLauncher
         )
@@ -105,11 +110,17 @@ fun Form(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                modifier = Modifier.background(MaterialTheme.colorScheme.primary),
                 onClick = {
                     onSaveClick()
                     navController.popBackStack()
-                }) {
+                },
+                enabled = isButtonEnabled,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    disabledContainerColor =  MaterialTheme.colorScheme.primary
+                )
+
+            ) {
                 BoldText(title = R.string.save_product)
             }
         }

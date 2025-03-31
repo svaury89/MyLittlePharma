@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.extension.networkUrltoBitmap
-import com.example.domain.model.ApiResult
+import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
 import com.example.ui.composable.ProductForm
 import com.example.ui.mapper.ProductUiMapper
@@ -28,8 +28,8 @@ class ProductByEanViewModel(
     val state  =
         productRepository.getProductByEan(ean = args.ean).map { result ->
             when (result) {
-                is ApiResult.Error -> GetNetworkProductState.Error(result.message)
-                is ApiResult.Success -> {
+                is Result.Error -> GetNetworkProductState.Error(result.message)
+                is Result.Success -> {
                     val productModel = result.productModel
                     if (productModel != null) {
                         _productUi.value  = mapper.toProductUi(

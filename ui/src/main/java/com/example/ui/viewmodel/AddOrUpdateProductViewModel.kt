@@ -29,6 +29,7 @@ class AddOrUpdateProductViewModel(
         .map { productModelResult ->
             productModelResult?.let {
                 _productUi.value = mapper.toProductUi(productModelResult.copy())
+                _validFormState.value = validator.validator(productUi.value)
             }
             GetProductUiState.isSuccess(_productUi.value.copy())
         }.distinctUntilChanged()

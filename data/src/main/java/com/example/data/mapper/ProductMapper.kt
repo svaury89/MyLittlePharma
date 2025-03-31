@@ -24,7 +24,7 @@ class ProductMapper {
         )
 
     fun fromProductModel(productModel: ProductModel): Product {
-        Log.i("ProductModel","ProductModel date to product " +productModel.date.toMillis())
+        Log.i("ProductModel","ProductModel date to product " +productModel.uid)
 
         return Product(
             uid = productModel.uid,

@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.extension.toStringWithFormat
@@ -15,6 +16,8 @@ import com.example.ui.model.ProductUi
 import com.example.ui.validator.ProductUiValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -28,10 +31,15 @@ open class ProductForm(
     internal val _productUi = MutableStateFlow(ProductUi(date = LocalDate.now().toStringWithFormat()))
     val productUi = _productUi.asStateFlow()
 
-    private val _validFormState = MutableStateFlow(false)
+    internal val _validFormState = MutableStateFlow(false)
     val validFormState = _validFormState.asStateFlow()
-
-
+    init {
+        viewModelScope.launch {
+            productUi.collect{
+                _validFormState.value = validator?.validator(it) ?: false
+            }
+        }
+    }
 
     fun saveProduct(context: Context) {
         val savedProductModel = _productUi.value.copy()
@@ -51,8 +59,6 @@ open class ProductForm(
                 date =  date ?: _productUi.value.date
             )
         }
-        _validFormState.value = validator.validator(productUi =productUi.value)
-
     }
 
     @SuppressLint("NewApi")

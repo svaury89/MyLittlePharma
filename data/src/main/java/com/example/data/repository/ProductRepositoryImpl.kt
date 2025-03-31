@@ -1,11 +1,10 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.api.service.GetProductApiService
 import com.example.data.firebase.FirebaseDao
 import com.example.data.mapper.ProductMapper
 import com.example.data.room.dao.ProductDao
-import com.example.domain.model.ApiResult
+import com.example.domain.model.Result
 import com.example.domain.model.ProductModel
 import com.example.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
@@ -62,16 +61,16 @@ class ProductRepositoryImpl(
     }
 
 
-    override fun getProductByEan(ean: String): Flow<ApiResult> = flow {
+    override fun getProductByEan(ean: String): Flow<Result> = flow {
         emit(
             try {
                 val productApi = getProductApiService.getProductApiByEan(ean = ean)
 
                 val errors = productApi.errors
                 if(errors?.isNotEmpty() == true){
-                    ApiResult.Error(errors[0].errorMessage?.message)
+                    Result.Error(errors[0].errorMessage?.message)
                 }else {
-                    ApiResult.Success(
+                    Result.Success(
                         if (productApi.product != null) {
                             productMapper.productNetworktoProductModel(productApi.product)
                         } else {
@@ -80,7 +79,7 @@ class ProductRepositoryImpl(
                     )
                 }
             } catch (e: Exception) {
-                ApiResult.Error(e.message)
+                Result.Error(e.message)
             }
         )
     }

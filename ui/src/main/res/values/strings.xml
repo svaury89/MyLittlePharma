@@ -5,16 +5,14 @@
     <string name="product_date">Date : </string>
 
     <string name="save_product"> Sauvegarder </string>
+    <string name="synchronize"> Synchroniser </string>
+
     <string name="warning"> Attention </string>
     <string name="product_peremption"> Le produit %s périme aujourd\'hui</string>
     <string name="peremption_date_picker"> Date de péremption</string>
 
     <string name="empty_list">Liste Vide</string>
-    <string name="empty_content">contenu vide</string>
+    <string name="empty_content">Contenu vide</string>
     <string name="error_content">Une erreur est survenue : %s </string>
-
-
-
-
 
 </resources>

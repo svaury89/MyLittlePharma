@@ -23,7 +23,6 @@ class ProductUiMapper {
 
 
     fun fromProductUi(productUi: ProductUi): ProductModel  {
-        Log.i("ProductModel","ProductModel date "+productUi.date.toDateWithFormat().toString())
        return  ProductModel(
             uid = productUi.uuid,
             name = productUi.name,
