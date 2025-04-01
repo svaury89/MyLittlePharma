@@ -1,6 +1,5 @@
 package com.example.ui.state
 
-import com.example.domain.model.ProductModel
 import com.example.ui.model.ProductUi
 
 sealed class GetNetworkProductState {

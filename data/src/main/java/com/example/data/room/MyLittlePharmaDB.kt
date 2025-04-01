@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.data.room.converter.DateConverter
-import com.example.data.room.dao.ProductDao
-import com.example.data.room.model.Product
+import com.example.data.room.dao.LocalProductDao
+import com.example.data.room.model.LocalProduct
 
-@Database(entities = [Product::class], version = 2)
+@Database(entities = [LocalProduct::class], version = 3)
 @TypeConverters(DateConverter :: class)
 abstract class MyLittlePharmaDB :  RoomDatabase() {
 
-    abstract fun productDao() : ProductDao
+    abstract fun productDao() : LocalProductDao
 }

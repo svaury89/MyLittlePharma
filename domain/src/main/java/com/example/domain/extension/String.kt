@@ -43,8 +43,6 @@ suspend fun String.networkUrltoBitmap(): Bitmap? {
     }
 }
 
-fun String?.isNullOrEmpty() = this.isNullOrBlank() or (this != null && this.isEmpty())
-
 
 fun String.isDateFormatValid(pattern: String = "dd/MM/yyyy"): Boolean {
     try {

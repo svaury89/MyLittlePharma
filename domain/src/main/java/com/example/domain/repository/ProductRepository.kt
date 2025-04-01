@@ -1,18 +1,16 @@
 package com.example.domain.repository
 
+import com.example.domain.model.GetProductBy
+import com.example.domain.model.ProductDraft
+import com.example.domain.model.Product
 import com.example.domain.model.Result
-import com.example.domain.model.ProductModel
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
 
-    suspend fun addOrUpdateProduct(productModel: ProductModel) : Boolean
+    suspend fun createOrUpdate(productDraft: ProductDraft) : Boolean
 
-    fun getProductList():Flow<List<ProductModel>>
+    fun getProductList():Flow<List<Product>>
 
-    fun getProductByIdOrNull(id : String?) : Flow<ProductModel?>
-
-    suspend fun syncProductFromFireBase()
-
-    fun getProductByEan(ean: String) : Flow<Result>
+    fun getProduct(getProductBy : GetProductBy) : Flow<Result>
 }

@@ -5,7 +5,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.extension.toStringWithFormat
@@ -16,13 +15,11 @@ import com.example.ui.model.ProductUi
 import com.example.ui.validator.ProductUiValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-open class ProductForm(
+open class BaseFormeViewModel(
     open val validator : ProductUiValidator,
     open val productRepository: ProductRepository,
     open val mapper: ProductUiMapper
@@ -42,12 +39,12 @@ open class ProductForm(
     }
 
     fun saveProduct(context: Context) {
-        val savedProductModel = _productUi.value.copy()
+        val savedProductDraft = _productUi.value.copy()
         viewModelScope.launch {
-            val productModel = mapper.fromProductUi(savedProductModel)
-            productRepository.addOrUpdateProduct(productModel)
-            productModel.date.registerOrDeleteAlarm(context,productModel.uid.hashCode(),true,productModel.name)
-            productModel.date.registerOrDeleteAlarm(context,productModel.uid.hashCode())
+            val productDraft = mapper.fromProductUi(savedProductDraft)
+            productRepository.createOrUpdate(productDraft)
+            productDraft.date.registerOrDeleteAlarm(context,productDraft.uid.hashCode(),true,productDraft.name)
+            productDraft.date.registerOrDeleteAlarm(context,productDraft.uid.hashCode())
         }
     }
 

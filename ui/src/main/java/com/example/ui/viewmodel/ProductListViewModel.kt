@@ -2,6 +2,7 @@ package com.example.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.repository.Gateway
 import com.example.domain.repository.ProductRepository
 import com.example.ui.mapper.ProductUiMapper
 import com.example.ui.state.GetProductsUiState
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class ProductListViewModel(
      val productRepository: ProductRepository,
-    val mapper: ProductUiMapper
+    val mapper: ProductUiMapper,
+    val gateway: Gateway
 ) : ViewModel() {
 
     val productState  = productRepository
@@ -34,7 +36,7 @@ class ProductListViewModel(
 
     fun syncProducts(){
         viewModelScope.launch {
-            productRepository.syncProductFromFireBase()
+            gateway.syncProductFromFireBase()
         }
     }
 }

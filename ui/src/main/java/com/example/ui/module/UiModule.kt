@@ -17,7 +17,7 @@ val uiModule = module{
         ProductUiMapper()
     }
     viewModel{
-        ProductListViewModel(get(),get())
+        ProductListViewModel(get(),get(),get())
     }
     viewModel{
         AddOrUpdateProductViewModel(get(),get(),get(),get())

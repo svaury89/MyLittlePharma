@@ -2,7 +2,7 @@ package com.example.data.module
 
 import android.app.Application
 import androidx.room.Room
-import com.example.data.room.dao.ProductDao
+import com.example.data.room.dao.LocalProductDao
 import org.koin.dsl.module
 import com.example.data.room.MyLittlePharmaDB
 
@@ -14,7 +14,7 @@ fun provideDataBase(application: Application): MyLittlePharmaDB =
         "table_product"
     ).fallbackToDestructiveMigration().build()
 
-fun provideDao(myLittlePharmaDB: MyLittlePharmaDB): ProductDao = myLittlePharmaDB.productDao()
+fun provideDao(myLittlePharmaDB: MyLittlePharmaDB): LocalProductDao = myLittlePharmaDB.productDao()
 
 
 val dataBaseModule = module {

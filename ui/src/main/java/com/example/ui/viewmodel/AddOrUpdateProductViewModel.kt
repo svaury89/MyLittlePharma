@@ -3,8 +3,10 @@ package com.example.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.domain.model.GetProductBy
+import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
-import com.example.ui.composable.ProductForm
+import com.example.ui.composable.BaseFormeViewModel
 import com.example.ui.mapper.ProductUiMapper
 import com.example.ui.navigation.AddOrUpdateProductNavigation
 import com.example.ui.state.GetProductUiState
@@ -20,16 +22,21 @@ class AddOrUpdateProductViewModel(
     override val productRepository: ProductRepository,
     savedStateHandle: SavedStateHandle,
     override val mapper: ProductUiMapper
-) : ProductForm(validator = validator, productRepository = productRepository, mapper = mapper) {
+) : BaseFormeViewModel(validator = validator, productRepository = productRepository, mapper = mapper) {
 
     private val args = savedStateHandle.toRoute<AddOrUpdateProductNavigation>()
 
 
-    val state = productRepository.getProductByIdOrNull(args.productUuid)
-        .map { productModelResult ->
-            productModelResult?.let {
-                _productUi.value = mapper.toProductUi(productModelResult.copy())
-                _validFormState.value = validator.validator(productUi.value)
+    val state = productRepository.getProduct(GetProductBy.ProductId(args.productUuid))
+        .map { result ->
+            when(result){
+                is Result.Error -> {}
+                is Result.Success -> {
+                    result.product?.let {
+                        _productUi.value = mapper.toProductUi(it)
+                        _validFormState.value = validator.validator(productUi.value)
+                    }
+                }
             }
             GetProductUiState.isSuccess(_productUi.value.copy())
         }.distinctUntilChanged()

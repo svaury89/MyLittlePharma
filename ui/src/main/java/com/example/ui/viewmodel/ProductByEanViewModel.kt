@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.extension.networkUrltoBitmap
+import com.example.domain.model.GetProductBy
 import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
-import com.example.ui.composable.ProductForm
+import com.example.ui.composable.BaseFormeViewModel
 import com.example.ui.mapper.ProductUiMapper
 import com.example.ui.navigation.EanProductNavigation
 import com.example.ui.state.GetNetworkProductState
@@ -21,20 +22,20 @@ class ProductByEanViewModel(
     override val productRepository: ProductRepository,
     savedStateHandle: SavedStateHandle,
     override val mapper: ProductUiMapper
-) : ProductForm(validator = validator, productRepository = productRepository, mapper = mapper) {
+) : BaseFormeViewModel(validator = validator, productRepository = productRepository, mapper = mapper) {
 
     private val args = savedStateHandle.toRoute<EanProductNavigation>()
 
     val state  =
-        productRepository.getProductByEan(ean = args.ean).map { result ->
+        productRepository.getProduct(GetProductBy.Ean(args.ean)).map { result ->
             when (result) {
                 is Result.Error -> GetNetworkProductState.Error(result.message)
                 is Result.Success -> {
-                    val productModel = result.productModel
-                    if (productModel != null) {
+                    val product = result.product
+                    if (product != null) {
                         _productUi.value  = mapper.toProductUi(
-                                productModel
-                            ).copy(image = productModel.imageUrl?.networkUrltoBitmap())
+                                product
+                            ).copy(image = product.imageUrl?.networkUrltoBitmap())
                             GetNetworkProductState.Product(
                                 _productUi.value.copy()
                             )
