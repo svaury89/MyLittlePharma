@@ -5,4 +5,5 @@ import com.example.data.room.model.LocalProduct
 interface ProductRemoteSource {
     fun writeProduct(localProduct: LocalProduct)
     suspend fun getProduct() : List<LocalProduct>
+    fun deleteProductById(id: String)
 }

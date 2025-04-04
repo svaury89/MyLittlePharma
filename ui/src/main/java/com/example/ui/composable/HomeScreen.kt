@@ -70,7 +70,8 @@ fun HomeScreen(
                 is GetProductsUiState.isSuccess ->
                     ProductList(
                         products = (state as GetProductsUiState.isSuccess).products,
-                        navController
+                        onProductSelected = { navController.navigate(AddOrUpdateProductNavigation(it)) },
+                        onProductDelete = {vm.deleteProduct(it)}
                     )
 
                 is GetProductsUiState.EmptyList ->
@@ -115,25 +116,26 @@ fun HomeScreen(
 @Composable
 fun ProductList(
     products: List<ProductUi>,
-    navController: NavHostController
+    onProductDelete: (String) -> Unit,
+    onProductSelected: (String) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(products) { product ->
-            ProductDetail(product) { navController.navigate(AddOrUpdateProductNavigation(product.uuid)) }
+            ProductDetail(productUi = product, onDeleted = onProductDelete, onProductSelected = onProductSelected)
         }
 
     }
 }
 
 @Composable
-fun ProductDetail(productUi: ProductUi, onProductSelected: () -> Unit) {
+fun ProductDetail(productUi: ProductUi, onProductSelected: (String) -> Unit, onDeleted : (String) ->Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onProductSelected() }
+            .clickable { onProductSelected(productUi.uuid) }
             .padding(bottom = 8.dp, top = 8.dp)
     ) {
         Row(
@@ -166,6 +168,18 @@ fun ProductDetail(productUi: ProductUi, onProductSelected: () -> Unit) {
                 TitleText(title = R.string.product_description, value = productUi.description)
                 TitleText(title = R.string.product_date, value = productUi.date.toString())
             }
+            Button(
+                onClick = {onDeleted(productUi.uuid)},
+                modifier = Modifier.size(width = 200.dp, height = 70.dp),
+                content = {
+                    Image(
+                        painterResource(R.drawable.delete_24),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+            )
+
         }
 
     }

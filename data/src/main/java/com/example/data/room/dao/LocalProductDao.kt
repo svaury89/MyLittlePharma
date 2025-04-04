@@ -22,11 +22,12 @@ interface LocalProductDao {
     @Insert (onConflict = OnConflictStrategy.IGNORE)
     fun insert(localProduct: LocalProduct) : Long
 
-    @Delete
-    fun deleteProduct(localProduct: LocalProduct)
+    @Query("Delete FROM localproduct where uid = :id")
+    fun deleteProductById(id : String )
 
     @Query("SELECT * FROM localproduct where localproduct.uid = :id")
     fun getProductById(id: String): Flow<LocalProduct>
+
 
 
     @Transaction

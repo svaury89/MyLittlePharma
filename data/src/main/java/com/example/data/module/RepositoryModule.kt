@@ -15,5 +15,4 @@ val repositoryModule = module {
     single {ProductMapper() }
     single <ProductRepository> { ProductRepositoryImpl(get(),get(),get(),get()) }
     single <Gateway> { GatewayImpl(get(),get()) }
-
 }

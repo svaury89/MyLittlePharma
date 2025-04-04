@@ -2,10 +2,13 @@ package com.example.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.repository.Gateway
 import com.example.domain.repository.ProductRepository
 import com.example.ui.mapper.ProductUiMapper
+import com.example.ui.model.ProductUi
 import com.example.ui.state.GetProductsUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -19,7 +22,7 @@ class ProductListViewModel(
 ) : ViewModel() {
 
     val productState  = productRepository
-        .getProductList()
+        .getAll()
         .map{
                 products ->
             if(products.isEmpty()){
@@ -37,6 +40,12 @@ class ProductListViewModel(
     fun syncProducts(){
         viewModelScope.launch {
             gateway.syncProductFromFireBase()
+        }
+    }
+
+    fun deleteProduct(id: String){
+        viewModelScope.launch(Dispatchers.IO) {
+          productRepository.delete(id)
         }
     }
 }

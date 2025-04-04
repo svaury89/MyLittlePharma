@@ -4,6 +4,7 @@ import com.example.data.api.model.ProductDetailAPi
 import com.example.data.room.model.LocalProduct
 import com.example.domain.extension.toLocalDate
 import com.example.domain.extension.toMillis
+import com.example.domain.model.Product
 import com.example.domain.model.ProductDraft
 import java.time.LocalDate
 

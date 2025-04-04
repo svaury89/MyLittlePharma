@@ -1,5 +1,6 @@
 package com.example.data.remote.dao
 
+import android.util.Log
 import com.example.data.exception.FireBaseException
 import com.example.data.remote.RemoteDatabaseHandler
 import com.google.firebase.database.ktx.database
@@ -30,6 +31,15 @@ class ProductRemoteSourceDao(
             map.values.toList()
         }else{
             emptyList()
+        }
+    }
+
+    override fun deleteProductById(id: String) {
+       val dbReference =  remoteDatabaseHandler.remoteDb.getReference("products")
+        dbReference.child(id).removeValue().addOnSuccessListener {
+            Log.i("Delete success","Delete Success")
+        }.addOnFailureListener{ exception ->
+            throw FireBaseException(exception, exception.message)
         }
     }
 }

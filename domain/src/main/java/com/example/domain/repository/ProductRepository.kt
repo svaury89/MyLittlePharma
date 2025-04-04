@@ -10,7 +10,9 @@ interface ProductRepository {
 
     suspend fun createOrUpdate(productDraft: ProductDraft) : Boolean
 
-    fun getProductList():Flow<List<Product>>
+    fun getAll():Flow<List<Product>>
+
+    suspend fun delete(id: String)
 
     fun getProduct(getProductBy : GetProductBy) : Flow<Result>
 }

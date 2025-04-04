@@ -19,7 +19,7 @@ class GatewayImpl(
         val productFromRoom = localProductDao.getProducts().first()
         productFromRoom.forEach {
             if (!productList.contains(it)) {
-                localProductDao.deleteProduct(it)
+                localProductDao.deleteProductById(it.uid)
             }
         }
     }

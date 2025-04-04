@@ -36,9 +36,13 @@ class ProductRepositoryImpl(
         )
     }
 
-    override fun getProductList(): Flow<List<Product>> =
+    override fun getAll(): Flow<List<Product>> =
         localProductDao.getProducts().map { list -> list.map { productMapper.toproduct(it) } }
 
+    override suspend fun delete(id: String) {
+        localProductDao.deleteProductById(id)
+        productRemoteSourceDao.deleteProductById(id)
+    }
 
 
     private fun getProductByIdOrNull(id: String?): Flow<Product?> =
