@@ -21,6 +21,9 @@ class ProductListViewModel(
     val gateway: Gateway
 ) : ViewModel() {
 
+    init {
+        observeRemoteDataBase()
+    }
     val productState  = productRepository
         .getAll()
         .map{
@@ -43,8 +46,13 @@ class ProductListViewModel(
         }
     }
 
+    fun observeRemoteDataBase(){
+        viewModelScope.launch {
+            gateway.realTimeDataBase()
+        }
+    }
     fun deleteProduct(id: String){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
           productRepository.delete(id)
         }
     }

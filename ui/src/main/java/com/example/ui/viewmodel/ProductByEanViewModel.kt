@@ -18,27 +18,31 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class ProductByEanViewModel(
-    override val validator : ProductUiValidator,
+    override val validator: ProductUiValidator,
     override val productRepository: ProductRepository,
     savedStateHandle: SavedStateHandle,
     override val mapper: ProductUiMapper
-) : BaseFormeViewModel(validator = validator, productRepository = productRepository, mapper = mapper) {
+) : BaseFormeViewModel(
+    validator = validator,
+    productRepository = productRepository,
+    mapper = mapper
+) {
 
     private val args = savedStateHandle.toRoute<EanProductNavigation>()
 
-    val state  =
+    val state =
         productRepository.getProduct(GetProductBy.Ean(args.ean)).map { result ->
             when (result) {
                 is Result.Error -> GetNetworkProductState.Error(result.message)
                 is Result.Success -> {
                     val product = result.product
                     if (product != null) {
-                        _productUi.value  = mapper.toProductUi(
-                                product
-                            ).copy(image = product.imageUrl?.networkUrltoBitmap())
-                            GetNetworkProductState.Product(
-                                _productUi.value.copy()
-                            )
+                        _productUi.value = mapper.toProductUi(
+                            product
+                        ).copy(image = product.imageUrl?.networkUrltoBitmap())
+                        GetNetworkProductState.Product(
+                            _productUi.value.copy()
+                        )
 
                     } else {
                         GetNetworkProductState.EmptyProduct

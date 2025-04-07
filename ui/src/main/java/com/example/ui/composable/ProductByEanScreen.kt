@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.ui.R
+import com.example.ui.navigation.HomeScreenNavigation
 import com.example.ui.state.GetNetworkProductState
 import com.example.ui.viewmodel.ProductByEanViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -32,8 +33,10 @@ fun ProductByEanScreen(
 
         is GetNetworkProductState.Product ->
             Form(
-                navController = navController,
-                onSaveClick = { vm.saveProduct(context) },
+                onSaveClick = {
+                    vm.saveProduct(context)
+                    navController.navigate(HomeScreenNavigation)
+                },
                 productUi = productUi,
                 onNameEdit = { vm.updateProductUi(name = it) },
                 onDescriptionEdit = { vm.updateProductUi(description = it) },

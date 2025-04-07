@@ -59,8 +59,10 @@ fun AddOrUpdateProductScreen(
 
         is GetProductUiState.isSuccess -> {
             Form(
-                navController = navController,
-                onSaveClick = { vm.saveProduct(context) },
+                onSaveClick = {
+                    vm.saveProduct(context)
+                    navController.popBackStack()
+                },
                 productUi = productUi,
                 onNameEdit = { vm.updateProductUi(name = it) },
                 onDescriptionEdit = { vm.updateProductUi(description = it) },
@@ -77,14 +79,13 @@ fun AddOrUpdateProductScreen(
 
 @Composable
 fun Form(
-    navController: NavController,
     onSaveClick: () -> Unit,
     productUi: ProductUi,
     onNameEdit: ((String) -> Unit)? = null,
     onDescriptionEdit: ((String) -> Unit)? = null,
     onDateEdit: (String) -> Unit,
     onUpdateImage: (Uri?) -> Unit,
-    isButtonEnabled : Boolean
+    isButtonEnabled: Boolean
 ) {
 
     val photoPickerLauncher =
@@ -112,12 +113,12 @@ fun Form(
             Button(
                 onClick = {
                     onSaveClick()
-                    navController.popBackStack()
+
                 },
                 enabled = isButtonEnabled,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
-                    disabledContainerColor =  MaterialTheme.colorScheme.primary
+                    disabledContainerColor = MaterialTheme.colorScheme.primary
                 )
 
             ) {

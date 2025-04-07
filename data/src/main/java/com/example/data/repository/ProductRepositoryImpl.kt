@@ -9,17 +9,21 @@ import com.example.domain.model.ProductDraft
 import com.example.domain.model.Product
 import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 
 class ProductRepositoryImpl(
     private val productRemoteSourceDao: ProductRemoteSourceDao,
     private val localProductDao: LocalProductDao,
     private val productMapper: ProductMapper,
-    private val getProductApiService: GetProductApiService
+    private val getProductApiService: GetProductApiService,
+    private val dispatcherIO: CoroutineDispatcher
 
 ) : ProductRepository {
 
@@ -40,8 +44,10 @@ class ProductRepositoryImpl(
         localProductDao.getProducts().map { list -> list.map { productMapper.toproduct(it) } }
 
     override suspend fun delete(id: String) {
-        localProductDao.deleteProductById(id)
-        productRemoteSourceDao.deleteProductById(id)
+        withContext(dispatcherIO){
+            localProductDao.deleteProductById(id)
+            productRemoteSourceDao.deleteProductById(id)
+        }
     }
 
 

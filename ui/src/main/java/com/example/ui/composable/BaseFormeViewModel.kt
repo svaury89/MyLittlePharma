@@ -44,7 +44,7 @@ open class BaseFormeViewModel(
             val productDraft = mapper.fromProductUi(savedProductDraft)
             productRepository.createOrUpdate(productDraft)
             productDraft.date.registerOrDeleteAlarm(context,productDraft.uid.hashCode(),true,productDraft.name)
-            productDraft.date.registerOrDeleteAlarm(context,productDraft.uid.hashCode())
+            productDraft.date.registerOrDeleteAlarm(context,productDraft.uid.hashCode(), productName =  productDraft.name)
         }
     }
 

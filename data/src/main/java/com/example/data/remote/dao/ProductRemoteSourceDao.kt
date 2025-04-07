@@ -3,9 +3,10 @@ package com.example.data.remote.dao
 import android.util.Log
 import com.example.data.exception.FireBaseException
 import com.example.data.remote.RemoteDatabaseHandler
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.example.data.room.model.LocalProduct
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.getValue
 import kotlinx.coroutines.tasks.await
 
@@ -37,9 +38,45 @@ class ProductRemoteSourceDao(
     override fun deleteProductById(id: String) {
        val dbReference =  remoteDatabaseHandler.remoteDb.getReference("products")
         dbReference.child(id).removeValue().addOnSuccessListener {
-            Log.i("Delete success","Delete Success")
         }.addOnFailureListener{ exception ->
             throw FireBaseException(exception, exception.message)
         }
+    }
+
+    override suspend fun updateRealTimeChangeFromRemoteDb(
+        onRemoveChild : (LocalProduct) -> Unit,
+        onAddOrUpdateChild : (LocalProduct) -> Unit
+    ) {
+        val dbReference = remoteDatabaseHandler.remoteDb.getReference("products")
+        dbReference.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val addProduct = snapshot.getValue(LocalProduct::class.java)
+                Log.i("DataChange","DataChange ADD")
+                addProduct?.let (onAddOrUpdateChild)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val updateProduct = snapshot.getValue(LocalProduct::class.java)
+                Log.i("DataChange","DataChange Update")
+
+                updateProduct?.let (onAddOrUpdateChild)
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                val removedProduct = snapshot.getValue(LocalProduct::class.java)
+                Log.i("DataChange","DataChange Remove")
+                removedProduct?.let(onRemoveChild)
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        } )
     }
 }
