@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +56,7 @@ fun HomeScreen(
 ) {
 
     val state by vm.productState.collectAsStateWithLifecycle()
+    val context  = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -62,7 +65,7 @@ fun HomeScreen(
     ) {
         Column {
             Button(
-                onClick = { vm.syncProducts() }
+                onClick = { vm.syncProducts(context= context) }
             ) {
                 Text(text = stringResource(id = R.string.synchronize))
             }
@@ -163,14 +166,14 @@ fun ProductDetail(productUi: ProductUi, onProductSelected: (String) -> Unit, onD
                 }
 
             }
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.padding(8.dp).weight(3f)) {
                 TitleText(title = R.string.product_name, value = productUi.name)
                 TitleText(title = R.string.product_description, value = productUi.description)
                 TitleText(title = R.string.product_date, value = productUi.date.toString())
             }
             Button(
                 onClick = {onDeleted(productUi.uuid)},
-                modifier = Modifier.size(width = 200.dp, height = 70.dp),
+                modifier = Modifier.wrapContentSize(),
                 content = {
                     Image(
                         painterResource(R.drawable.delete_24),

@@ -10,7 +10,6 @@ import com.example.domain.model.Product
 import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -41,7 +40,7 @@ class ProductRepositoryImpl(
     }
 
     override fun getAll(): Flow<List<Product>> =
-        localProductDao.getProducts().map { list -> list.map { productMapper.toproduct(it) } }
+        localProductDao.getProducts().map { list -> list.map { productMapper.toProduct(it) } }
 
     override suspend fun delete(id: String) {
         withContext(dispatcherIO){
@@ -53,7 +52,7 @@ class ProductRepositoryImpl(
 
     private fun getProductByIdOrNull(id: String?): Flow<Product?> =
         if (id != null) {
-            localProductDao.getProductById(id).map { productMapper.toproduct(it) }
+            localProductDao.getProductById(id).map { productMapper.toProduct(it) }
         } else {
             flowOf(null)
         }
@@ -70,7 +69,7 @@ class ProductRepositoryImpl(
                 }else {
                     Result.Success(
                         if (productApi.product != null) {
-                            productMapper.productNetworkToproduct(productApi.product)
+                            productMapper.productNetworkToProduct(productApi.product)
                         } else {
                             null
                         }

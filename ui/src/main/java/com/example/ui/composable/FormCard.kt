@@ -45,7 +45,7 @@ fun FormCard(
     ) {
 
         Column(
-            modifier = Modifier
+            modifier = Modifier.padding(8.dp)
         ) {
             Row(
                 modifier = Modifier

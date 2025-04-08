@@ -7,12 +7,13 @@ import com.example.domain.extension.toStringWithFormat
 import com.example.domain.model.ProductDraft
 import com.example.domain.model.Product
 import com.example.ui.model.ProductUi
+import java.util.UUID
 
 class ProductUiMapper {
 
     fun toProductUi(product: Product): ProductUi =
         ProductUi(
-            uuid = product.uid,
+            uuid = product.uid ,
             name = product.name,
             description = product.description,
             date = product.date.toStringWithFormat(),

@@ -51,20 +51,16 @@ class ProductRemoteSourceDao(
         dbReference.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val addProduct = snapshot.getValue(LocalProduct::class.java)
-                Log.i("DataChange","DataChange ADD")
                 addProduct?.let (onAddOrUpdateChild)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 val updateProduct = snapshot.getValue(LocalProduct::class.java)
-                Log.i("DataChange","DataChange Update")
-
                 updateProduct?.let (onAddOrUpdateChild)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 val removedProduct = snapshot.getValue(LocalProduct::class.java)
-                Log.i("DataChange","DataChange Remove")
                 removedProduct?.let(onRemoveChild)
 
             }

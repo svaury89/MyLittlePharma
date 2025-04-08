@@ -13,9 +13,13 @@ import kotlin.math.sin
 
 val repositoryModule = module {
     single { Dispatchers.IO }
-    single { RemoteDatabaseHandler()}
+    single { RemoteDatabaseHandler() }
     single { ProductRemoteSourceDao(get()) }
-    single {ProductMapper() }
-    single <ProductRepository> { ProductRepositoryImpl(get(),get(),get(), get(),get()) }
-    single <Gateway> { GatewayImpl(get(),get(),get()) }
+    single { ProductMapper() }
+    single<ProductRepository> { ProductRepositoryImpl(get(), get(), get(), get(), get()) }
+    single<Gateway> { GatewayImpl(
+        productRemoteSourceDao = get(),
+        localProductDao = get(),
+        dispatcherIO = get(),
+        mapper =  get()) }
 }
