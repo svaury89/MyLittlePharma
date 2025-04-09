@@ -123,7 +123,10 @@ fun ProductList(
     onProductSelected: (String) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(products) { product ->
+        items(
+            items = products,
+            key = {it.uuid}
+        ) { product ->
             ProductDetail(productUi = product, onDeleted = onProductDelete, onProductSelected = onProductSelected)
         }
 
