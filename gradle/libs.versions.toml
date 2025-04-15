@@ -24,12 +24,17 @@ lifecycleCompose ="2.8.7"
 serialization = "1.6.3"
 serializationPlugin = "1.8.20"
 camerax = "1.3.1"
+googlePlayTextRecognition = "19.0.1"
 scan = "17.3.0"
+textRecognition = "16.0.1"
 desugar ="2.0.4"
 coil = "3.1.0"
+playServicesMlkitTextRecognitionCommon = "19.1.0"
 
 [libraries]
 
+mlkit_text_recognition_google_play =  { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "googlePlayTextRecognition" }
+mlkit_text_recognition =  { group = "com.google.mlkit", name = "text-recognition", version.ref = "textRecognition" }
 coil_network =  { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 coil =  { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 desugar =  { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
@@ -71,6 +76,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

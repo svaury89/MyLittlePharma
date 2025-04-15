@@ -9,4 +9,5 @@ data class ProductUi (
     val description : String = "",
     val date: String = "",
     val image : Bitmap ? = null ,
+    val dateState: DateState = DateState.VALID
 )

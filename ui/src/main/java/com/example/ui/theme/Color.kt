@@ -15,5 +15,14 @@ val AlmondGreen =Color(0xFFE0EDC6)
 val LightAlmondGreen =Color(0xFFD1E7B7)
 
 
+val LightOrange =Color(0xFFFFDBBB)
+val LightRed =Color(0xFFFF7F7F)
+val DarkOrange = Color(color = 0xFFFF4B33)
+val DarkRed =Color(0xFF950606)
+
+
+
+
+
 val DarkGreen = Color(0xFF06402B)
 

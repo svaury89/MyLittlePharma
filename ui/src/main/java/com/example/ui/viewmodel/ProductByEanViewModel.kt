@@ -1,9 +1,11 @@
 package com.example.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.extension.networkUrltoBitmap
+import com.example.domain.extension.toDateWithFormat
 import com.example.domain.model.GetProductBy
 import com.example.domain.model.Result
 import com.example.domain.repository.ProductRepository
@@ -35,7 +37,8 @@ class ProductByEanViewModel(
             when (result) {
                 is Result.Error -> GetNetworkProductState.Error(result.message)
                 is Result.Success -> {
-                    val product = result.product
+                    Log.i("DateFormat","DateFormat "+ args.date)
+                    val product = result.product?.copy(date = args.date.toDateWithFormat() )
                     if (product != null) {
                         _productUi.value = mapper.toProductUi(
                             product

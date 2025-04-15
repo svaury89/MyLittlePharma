@@ -1,6 +1,5 @@
 package com.example.domain.extension
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +51,39 @@ fun String.isDateFormatValid(pattern: String = "dd/MM/yyyy"): Boolean {
     } catch (e: Exception) {
         return false
     }
+}
+
+fun String.reformatIfInputIsDate(): String ? {
+
+
+    val dateToTest = this.trim().replace("-","/").replace(" ","/").replace(".","/")
+    //"dd/MM/yyyy"
+    val regex1 = "^(3[01]|[12][0-9]|0[1-9]|[1-9])/(1[0-2]|0[1-9]|[1-9])/[0-9]{4}$".toRegex()
+
+    //MM/yyyy"
+    val regex2 = "(1[0-2]|0[1-9]|[1-9])/[0-9]{4}$".toRegex()
+
+    //"yyyy/MM"
+    val regex3 =
+        "([0-9]{4})/(1[0-2]|0[1-9]|[1-9])$".toRegex()
+
+    //"yyyy/MM/dd"
+    val regex4 =
+        "([0-9]{4})/(1[0-2]|0[1-9]|[1-9])/(3[01]|[12][0-9]|0[1-9]|[1-9])$".toRegex()
+
+    val bool1: Boolean = regex1.matches(dateToTest)
+    val bool2: Boolean = regex2.matches(dateToTest)
+    val bool3 : Boolean = regex3.matches(dateToTest)
+    val bool4: Boolean = regex4.matches(dateToTest)
+
+    return when{
+        bool1 || bool4 -> dateToTest
+        bool3 -> dateToTest + "/01"
+        bool2-> "01/" + dateToTest
+        else -> null
+    }
+
+
 }
 
 

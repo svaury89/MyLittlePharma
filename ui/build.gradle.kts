@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":domain") )
     implementation(libs.koin)
     implementation(libs.koin.compose)
+    implementation(libs.mlkit.text.recognition.google.play)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.navigation)
     implementation(libs.kotlin.serialization)
+    implementation(libs.mlkit.text.recognition)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.camera.core)
     implementation(libs.camera.lifecycle)
@@ -63,6 +65,7 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.mlkit.scan)
     implementation(libs.coil)
+    implementation(libs.play.services.mlkit.text.recognition.common)
     coreLibraryDesugaring(libs.desugar)
 
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -74,4 +77,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(kotlin("test"))
 }

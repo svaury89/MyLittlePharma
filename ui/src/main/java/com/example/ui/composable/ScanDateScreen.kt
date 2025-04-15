@@ -12,41 +12,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.ui.R
-
-import com.example.ui.extension.scanImageProxy
+import com.example.ui.extension.textAnalyserImageProxy
 import com.example.ui.navigation.EanProductNavigation
-import com.example.ui.navigation.ScanDateNavigation
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 @Composable
-fun ScanProductScreen(
-    navigationController: NavHostController
+fun ScanDateScreen(
+    navigationController: NavHostController,
+    ean: String
 ) {
-    val option =
-        BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS).build()
-    val scanner = BarcodeScanning.getClient(option)
-
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     Column(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BoldText(
             modifier = Modifier.padding(16.dp),
-            title = R.string.scan_bar_code_title
+            title = R.string.scan_date_title
         )
-
         CameraScreen(
             onProcessImage = { imageProxy, cameraProvider ->
-                imageProxy.scanImageProxy(
-                    barcodeScanner = scanner,
-                    onFinishScan = { ean, date ->
-                        if (date == null) {
-                            navigationController.navigate(ScanDateNavigation(ean))
-                            cameraProvider.unbindAll()
-                        }
+                imageProxy.textAnalyserImageProxy(
+                    recognizer = recognizer,
+                    onFinishScan = { date ->
+                        navigationController.navigate(EanProductNavigation(ean = ean, date = date))
+                        cameraProvider.unbindAll()
                     }
 
                 )
@@ -54,6 +45,4 @@ fun ScanProductScreen(
 
         )
     }
-
 }
-

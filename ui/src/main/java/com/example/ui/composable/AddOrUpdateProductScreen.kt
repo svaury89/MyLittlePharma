@@ -129,12 +129,4 @@ fun Form(
 }
 
 
-@Composable
-fun BoldText(@StringRes title: Int) {
-    Text(
-        text = stringResource(id = title),
-        color = MaterialTheme.colorScheme.tertiary,
-        fontWeight = FontWeight.Bold
-    )
-}
 

@@ -10,14 +10,17 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.ui.theme.MyLittlePharmaTheme
 import com.example.ui.composable.AddOrUpdateProductScreen
 import com.example.ui.composable.HomeScreen
 import com.example.ui.composable.ProductByEanScreen
+import com.example.ui.composable.ScanDateScreen
 import com.example.ui.composable.ScanProductScreen
 import com.example.ui.navigation.AddOrUpdateProductNavigation
 import com.example.ui.navigation.EanProductNavigation
 import com.example.ui.navigation.HomeScreenNavigation
+import com.example.ui.navigation.ScanDateNavigation
 import com.example.ui.navigation.ScanProductNavigation
 
 
@@ -67,6 +70,10 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<ScanProductNavigation> {
                         ScanProductScreen(navigationController = navController)
+                    }
+                    composable<ScanDateNavigation> {
+
+                        ScanDateScreen(navigationController = navController, it.toRoute<ScanDateNavigation>().ean)
                     }
                     composable<EanProductNavigation> {
                         ProductByEanScreen(navController = navController)

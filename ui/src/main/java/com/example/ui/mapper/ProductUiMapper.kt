@@ -6,7 +6,9 @@ import com.example.domain.extension.toDateWithFormat
 import com.example.domain.extension.toStringWithFormat
 import com.example.domain.model.ProductDraft
 import com.example.domain.model.Product
+import com.example.ui.model.DateState
 import com.example.ui.model.ProductUi
+import java.time.LocalDate
 import java.util.UUID
 
 class ProductUiMapper {
@@ -18,6 +20,7 @@ class ProductUiMapper {
             description = product.description,
             date = product.date.toStringWithFormat(),
             image = product.image?.toBitMap(),
+            dateState =  dateStateRules(product.date)
         )
 
 
@@ -29,6 +32,14 @@ class ProductUiMapper {
             date = productUi.date.toDateWithFormat(),
             image = productUi.image?.convertToString() ?: "",
         )
+    }
+
+    private fun dateStateRules (date : LocalDate) = if(date.isBefore(LocalDate.now())){
+        DateState.EXPIRED
+    }else if(date.minusDays(3).isBefore(LocalDate.now())){
+        DateState.EXPIREDSOON
+    }else{
+        DateState.VALID
     }
 
 
