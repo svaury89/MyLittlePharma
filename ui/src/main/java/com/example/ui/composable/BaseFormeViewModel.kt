@@ -3,8 +3,10 @@ package com.example.ui.composable
 import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
+import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.extension.toStringWithFormat
@@ -73,5 +75,9 @@ open class BaseFormeViewModel(
         }
     }
 
-
+    fun updateImage(bitMap : Bitmap){
+        _productUi.update {
+            it.copy(image = bitMap)
+        }
+    }
 }

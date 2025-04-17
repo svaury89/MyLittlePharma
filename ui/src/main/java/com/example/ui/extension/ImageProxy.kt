@@ -1,5 +1,10 @@
 package com.example.ui.extension
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
@@ -7,6 +12,7 @@ import com.example.domain.extension.reformatIfInputIsDate
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognizer
+import java.io.ByteArrayOutputStream
 
 
 @OptIn(ExperimentalGetImage::class)
@@ -49,4 +55,12 @@ fun ImageProxy.textAnalyserImageProxy(
         }
     }
 
+}
+
+fun ImageProxy.toBitmap() : Bitmap {
+    val buffer = planes[0].buffer
+    buffer.rewind()
+    val bytes = ByteArray(buffer.capacity())
+    buffer.get(bytes)
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }

@@ -44,6 +44,9 @@ fun ProductByEanScreen(
                 onUpdateImage = {
                     vm.updateImage(it, contentResolver)
                 },
+                onTakePicture =   {
+                    vm.updateImage(it)
+                },
                 isButtonEnabled = validator
             )
 

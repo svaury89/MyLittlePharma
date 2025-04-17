@@ -1,22 +1,31 @@
 package com.example.ui.composable
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -30,11 +39,11 @@ import com.example.ui.model.ProductUi
 @Composable
 fun FormCard(
     productUi: ProductUi,
-    onChangeName:((String)->Unit) ?   = null ,
-    onChangeDescription:((String)->Unit) ? = null,
-    onChangeDate:(String)->Unit = {},
-    photoPickerLauncher : ManagedActivityResultLauncher<PickVisualMediaRequest,Uri?>
-){
+    onChangeName: ((String) -> Unit)? = null,
+    onChangeDescription: ((String) -> Unit)? = null,
+    onChangeDate: (String) -> Unit = {},
+    onLaunchCamera : ()-> Unit
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -51,10 +60,7 @@ fun FormCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        photoPickerLauncher
-                            .launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
-                            )
+                        onLaunchCamera()
                     },
                 horizontalArrangement = Arrangement.Center
             )
@@ -79,10 +85,22 @@ fun FormCard(
                 }
             }
 
-            MLPTextField(title = R.string.product_name, textFieldValue =  productUi.name, onValueChange = onChangeName ?: {})
-            MLPTextField(title = R.string.product_description, textFieldValue =  productUi.description, onValueChange = onChangeDescription ?: {})
-            LimitDate(onUpdateDate =  onChangeDate, date = productUi.date, title = R.string.product_date )
+            MLPTextField(
+                title = R.string.product_name,
+                textFieldValue = productUi.name,
+                onValueChange = onChangeName ?: {})
+            MLPTextField(
+                title = R.string.product_description,
+                textFieldValue = productUi.description,
+                onValueChange = onChangeDescription ?: {})
+            LimitDate(
+                onUpdateDate = onChangeDate,
+                date = productUi.date,
+                title = R.string.product_date
+            )
+
         }
 
     }
+
 }

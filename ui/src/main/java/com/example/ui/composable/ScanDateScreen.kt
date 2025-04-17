@@ -32,12 +32,11 @@ fun ScanDateScreen(
             title = R.string.scan_date_title
         )
         CameraScreen(
-            onProcessImage = { imageProxy, cameraProvider ->
+            onProcessImage = { imageProxy ->
                 imageProxy.textAnalyserImageProxy(
                     recognizer = recognizer,
                     onFinishScan = { date ->
                         navigationController.navigate(EanProductNavigation(ean = ean, date = date))
-                        cameraProvider.unbindAll()
                     }
 
                 )

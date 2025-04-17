@@ -39,13 +39,12 @@ fun ScanProductScreen(
         )
 
         CameraScreen(
-            onProcessImage = { imageProxy, cameraProvider ->
+            onProcessImage = { imageProxy ->
                 imageProxy.scanImageProxy(
                     barcodeScanner = scanner,
                     onFinishScan = { ean, date ->
                         if (date == null) {
                             navigationController.navigate(ScanDateNavigation(ean))
-                            cameraProvider.unbindAll()
                         }
                     }
 
