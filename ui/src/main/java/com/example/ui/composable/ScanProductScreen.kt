@@ -16,6 +16,7 @@ import com.example.ui.R
 import com.example.ui.extension.scanImageProxy
 import com.example.ui.navigation.EanProductNavigation
 import com.example.ui.navigation.ScanDateNavigation
+import com.example.ui.navigation.ScanProductNavigation
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -39,12 +40,15 @@ fun ScanProductScreen(
         )
 
         CameraScreen(
+            imageCaptureEnabled = false,
             onProcessImage = { imageProxy ->
                 imageProxy.scanImageProxy(
                     barcodeScanner = scanner,
                     onFinishScan = { ean, date ->
                         if (date == null) {
                             navigationController.navigate(ScanDateNavigation(ean))
+                        }else{
+                            navigationController.navigate(EanProductNavigation(ean,date))
                         }
                     }
 

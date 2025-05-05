@@ -5,11 +5,15 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import com.example.domain.extension.reformatIfInputIsDate
+import com.example.domain.extension.toBarCodeAndDate
 import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.barcode.common.Barcode.BarcodeFormat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognizer
 import java.io.ByteArrayOutputStream
@@ -25,7 +29,16 @@ fun ImageProxy.scanImageProxy(
         barcodeScanner.process(inputImage).addOnSuccessListener { barcodeList ->
             val barcode = barcodeList.getOrNull(0)
             barcode?.rawValue?.let {
-                onFinishScan(it,null)
+                Log.i("Format","Format "+ it)
+
+                when(barcode.format){
+                    Barcode.FORMAT_EAN_13 -> onFinishScan(it,null)
+                    Barcode.FORMAT_DATA_MATRIX -> {
+                        val result = it.toBarCodeAndDate()
+                        Log.i("Format","Format AFTER  "+ result.first + " "+ result.second)
+                        onFinishScan(result.first,result.second)
+                    }
+                }
             }
         }.addOnCompleteListener {
             image.close()

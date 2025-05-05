@@ -32,6 +32,7 @@ fun ScanDateScreen(
             title = R.string.scan_date_title
         )
         CameraScreen(
+            imageCaptureEnabled = false,
             onProcessImage = { imageProxy ->
                 imageProxy.textAnalyserImageProxy(
                     recognizer = recognizer,
@@ -40,7 +41,7 @@ fun ScanDateScreen(
                     }
 
                 )
-            }
+            },
 
         )
     }

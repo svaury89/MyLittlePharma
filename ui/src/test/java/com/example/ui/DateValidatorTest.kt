@@ -59,4 +59,16 @@ class DateValidatorTest {
         val str = "01/04/Test"
         assertEquals(null,str.reformatIfInputIsDate())
     }
+
+    @Test
+    fun fullString_with_valid_mounth_is_valid(){
+        val str = "2704"
+        assertEquals("01/04/2027",str.reformatIfInputIsDate())
+    }
+
+    @Test
+    fun fullString_with_not_valid_mounth_is_invalid(){
+        val str = "2713"
+        assertEquals(null,str.reformatIfInputIsDate())
+    }
 }

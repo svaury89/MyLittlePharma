@@ -71,19 +71,28 @@ fun String.reformatIfInputIsDate(): String ? {
     val regex4 =
         "([0-9]{4})/(1[0-2]|0[1-9]|[1-9])/(3[01]|[12][0-9]|0[1-9]|[1-9])$".toRegex()
 
+    val regex5 = "([0-9]{2}(([1-9])|(0[1-9]|1[0-2])))$".toRegex()
+
     val bool1: Boolean = regex1.matches(dateToTest)
     val bool2: Boolean = regex2.matches(dateToTest)
     val bool3 : Boolean = regex3.matches(dateToTest)
     val bool4: Boolean = regex4.matches(dateToTest)
+    val bool5: Boolean = regex5.matches(dateToTest)
 
     return when{
         bool1 || bool4 -> dateToTest
         bool3 -> dateToTest + "/01"
         bool2-> "01/" + dateToTest
+        bool5 -> {
+           "01/"+ dateToTest.substring(2,4) + "/20"+ dateToTest.substring(0,2)
+        }
         else -> null
     }
 
-
 }
+
+fun String.toBarCodeAndDate() : Pair<String, String?> =
+    Pair(this.substring(4,17),this.substring(19,23).reformatIfInputIsDate())
+
 
 

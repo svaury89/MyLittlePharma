@@ -1,19 +1,15 @@
 package com.example.data.module
 
-import android.util.Log
 import com.example.data.api.service.GetProductApiService
-import okhttp3.Interceptor
+
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import okhttp3.Request
-import okhttp3.Response
+
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
-import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
 

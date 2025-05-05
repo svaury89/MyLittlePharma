@@ -2,13 +2,12 @@ package com.example.ui.composable
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.ImageProxy
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,15 +19,17 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.domain.extension.rotate
 import com.example.ui.R
 import com.example.ui.model.ProductUi
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -39,7 +40,7 @@ fun Form(
     onDescriptionEdit: ((String) -> Unit)? = null,
     onDateEdit: (String) -> Unit,
     onUpdateImage: (Uri?) -> Unit,
-    onTakePicture : (Bitmap) -> Unit,
+    onTakePicture: (Bitmap) -> Unit,
     isButtonEnabled: Boolean
 ) {
 
@@ -48,8 +49,10 @@ fun Form(
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia()
         ) {
-            launchCamera.value = false
-            onUpdateImage(it)
+            it?.let {
+                launchCamera.value = false
+                onUpdateImage(it)
+            }
         }
 
     Column {
@@ -93,7 +96,7 @@ fun Form(
                     )
             },
             onProcessImage = {
-                onTakePicture(it.toBitmap())
+                onTakePicture(it.toBitmap().rotate(90f))
             }
         )
     }
@@ -108,28 +111,31 @@ fun CameraLaunch(
     onLaunchGalery: () -> Unit,
     onProcessImage: (ImageProxy) -> Unit
 ) {
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+    val hideModalBottomSheet: () -> Unit =
+        {
+            coroutineScope.launch {
+                bottomSheetState.hide()
+                onDismiss()
+            }
+        }
     ModalBottomSheet(
         onDismissRequest = {
+            Log.i("onDismiss ","onDismiss")
             onDismiss()
         },
+        sheetState = bottomSheetState
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             CameraScreen(
-                onProcessImage =
-                    onProcessImage
+                onProcessImage = {
+                    hideModalBottomSheet()
+                    onProcessImage(it)
+                },
+                onLaunchGalery = onLaunchGalery
             )
-            Button(
-                modifier = Modifier
-                    .align(Alignment.TopEnd),
-                onClick = {
-                    onLaunchGalery()
-                }
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.no_photography),
-                    contentDescription = ""
-                )
-            }
+
         }
     }
 
